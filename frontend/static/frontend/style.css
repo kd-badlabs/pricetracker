@@ -1,0 +1,30 @@
+body {
+    margin: 0;
+    width: 100%;
+    font-family: 'Montserrat', sans-serif;
+    box-sizing: border-box;
+}
+
+.data {
+    height: 200px;
+}
+
+.title_price {
+    font-size: 2rem;
+    font-family: 'Montserrat:wght@400', sans-serif;
+    letter-spacing: 3px;
+}
+
+.sub_heading {
+    font-size: 1rem;
+    font-family: 'Montserrat:wght@300', sans-serif;
+    letter-spacing: 3px;
+}
+
+.border-primary {
+    border-width: thick;
+}
+
+.border {
+    background-color: #D1D0CE;
+}
