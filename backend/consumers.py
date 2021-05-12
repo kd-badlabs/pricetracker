@@ -57,17 +57,6 @@ class Stock(WebsocketConsumer):
         print('disconnected')
 
 
-# callfor realtime update
-def stockData(tic,per):
-    stock = yf.Ticker(tic)
-    return stock.history(period=per)
-
-# call for Histrorical data
-def stockData_period(ticker,period,interval):
-    data = yf.download(tickers=ticker, period=period, interval=interval)
-    df = pd.DataFrame(data)
-    print (df.head())
-    return df
 
 class Stock_New(AsyncWebsocketConsumer):
     
@@ -101,7 +90,7 @@ class Stock_New(AsyncWebsocketConsumer):
                 stock["close"]=df.iloc[0].Close
                 stock["volume"]=df.iloc[0].Volume
                 stock["dividends"]=df.iloc[0].Dividends
-                self.send(text_data=json.dumps({'price' : stock}))
+                await self.send(text_data=json.dumps({'price' : stock}))
                 
                 
     

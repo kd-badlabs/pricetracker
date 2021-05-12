@@ -55,7 +55,15 @@ class App extends Component {
   };
 
   componentDidMount() {
-    this.openConnection();
+    this.chatSocket.onmessage = (e) => {
+      const data = JSON.parse(e.data);
+      console.log(data);
+      if (data.status === "Connected") {
+        this.sendData(this.state.ticker);
+      } else {
+        this.setState({ stockdetail: data.price });
+      }
+    };
   }
 
   render() {
