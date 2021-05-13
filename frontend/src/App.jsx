@@ -3,8 +3,8 @@ import TitleBar from "./components/TitleBar";
 import Chart from "./components/Chart";
 import OverView from "./components/OverView";
 
-function getSocket() {
-  const socketPath = "ws://localhost:8000/ws/test_1/";
+function getSocket(id) {
+  const socketPath = `ws://localhost:8000/ws/stock${id}/`;
   const chatSocket = new WebSocket(socketPath);
   return chatSocket;
 }
@@ -15,8 +15,9 @@ class App extends Component {
     this.state = {
       ticker: "AAPL",
       stockdetail: null,
+      socketid: 0,
     };
-    this.chatSocket = getSocket();
+    this.chatSocket = getSocket(this.state.socketid);
   }
 
   sendData = (ticker) => {
@@ -27,30 +28,11 @@ class App extends Component {
     );
   };
 
-  closeConnection = () => {
-    this.chatSocket.onclose = () => {
-      console.log(e);
-    };
-  };
-
-  openConnection = () => {
-    this.chatSocket.onmessage = (e) => {
-      const data = JSON.parse(e.data);
-      console.log(data);
-      if (data.status === "Connected") {
-        this.sendData(this.state.ticker);
-      } else {
-        this.setState({ stockdetail: data.price });
-      }
-    };
-  };
-
-  handleSetTicker = (symbol) => {
-    this.setState({ ticker: symbol }, () => {
-      alert(this.state.ticker);
-      // this.closeConnection();
-      // this.openConnection();
-      this.sendData(this.state.ticker);
+  handleSetTicker = (symbol, id) => {
+    alert(id);
+    this.setState({ ticker: symbol, socketid: id }, () => {
+      this.chatSocket = getSocket(this.state.socketid);
+      setTimeout(this.sendData(this.state.ticker), 5000);
     });
   };
 
@@ -61,7 +43,10 @@ class App extends Component {
       if (data.status === "Connected") {
         this.sendData(this.state.ticker);
       } else {
-        this.setState({ stockdetail: data.price });
+        this.setState({ stockdetail: data.price }, () => {
+          // this.sendData(this.state.ticker);
+          console.log("hello");
+        });
       }
     };
   }
@@ -81,7 +66,7 @@ class App extends Component {
           <Chart />
         </div>
         <div className="p-2 my-2">
-          <OverView />
+          <OverView stockdetail={this.state.stockdetail} />
         </div>
       </div>
     );

@@ -4,7 +4,8 @@ export default class TitleBar extends Component {
     super(props);
     this.state = {
       ticker: "",
-      tickerTag: ["MSFT", "GOOG"],
+      tickerTag: ["AAPL", "MSFT", "GOOG"],
+      ticker_index: "AAPL",
     };
   }
 
@@ -34,7 +35,8 @@ export default class TitleBar extends Component {
   };
 
   handletickerChange = (e) => {
-    this.props.handleSetTicker(e.target.id);
+    this.setState({ ticker_index: e.target.id });
+    this.props.handleSetTicker(e.target.id, e.target.getAttribute("target_id"));
   };
 
   render() {
@@ -50,7 +52,7 @@ export default class TitleBar extends Component {
             onChange={this.handleTicker}
           />
           <div
-            className="col-1 text-center p-1 mr-2  mt-2  border text-bold bg-light rounded-right"
+            className="col-1 text-center pointer p-1 mr-2  mt-2  border text-bold bg-light rounded-right"
             onClick={this.handleAddticker}
           >
             Add
@@ -59,7 +61,12 @@ export default class TitleBar extends Component {
             <div
               id={ticker}
               key={index}
-              className="border bg-light p-1 mr-2 mt-2 text-center col-1"
+              target_id={index}
+              className={`border p-1 mr-2 mt-2 text-center col-1 pointer ${
+                this.state.ticker_index == ticker
+                  ? "bg-primary text-white"
+                  : "bg-light text-dark"
+              }`}
               onDoubleClick={this.handleDeleteTicker}
               onClick={this.handletickerChange}
             >
@@ -76,13 +83,34 @@ export default class TitleBar extends Component {
                   ? this.props.stockdetail.close.toFixed(2)
                   : "NA"}
               </span>
-              <span> USD</span>
-              <span className="text-danger"> +2.01 [ +.09 %]</span>
+              <span> USD </span>
+              {this.props.stockdetail != null ? (
+                <span
+                  className={`${
+                    this.props.stockdetail.close -
+                      this.props.stockdetail.open <=
+                    0
+                      ? "text-danger"
+                      : "text-success"
+                  }`}
+                >
+                  {(
+                    this.props.stockdetail.close - this.props.stockdetail.open
+                  ).toFixed(2)}
+                  [
+                  {(
+                    ((this.props.stockdetail.close -
+                      this.props.stockdetail.open) /
+                      this.props.stockdetail.open) *
+                    100
+                  ).toFixed(3)}
+                  % ]
+                </span>
+              ) : (
+                "NA"
+              )}
             </div>
-            <div>
-              {`${this.props.symbol}`} . Apple Technology . Technology &
-              Communication
-            </div>
+            <div className="sub_heading">{`${this.props.symbol}`}</div>
           </div>
           <div className="col-3 text-right align-self-end">
             <div>Market Open</div>

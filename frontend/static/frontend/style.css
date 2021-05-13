@@ -10,7 +10,7 @@ body {
 }
 
 .title_price {
-    font-size: 2rem;
+    font-size: 2.5rem;
     font-family: 'Montserrat:wght@400', sans-serif;
     letter-spacing: 3px;
 }
@@ -27,4 +27,8 @@ body {
 
 .border {
     background-color: #D1D0CE;
+}
+
+.pointer {
+    cursor: pointer;
 }

@@ -7,13 +7,16 @@ from backend.consumers import *
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "project.settings")
 
-application = get_asgi_application()
+application = get_asgi_application()    
 
 
 ws_patterns =[
-    path('ws/test/',Stock.as_asgi()) ,
-    path('ws/test_1/',Stock_New.as_asgi())    
+    path('ws/stock/',Stock.as_asgi()) , 
+    path('ws/new/',NewStock.as_asgi()) ,   
 ]
+
+
 application = ProtocolTypeRouter({
     "websocket": URLRouter(ws_patterns),
 })
+

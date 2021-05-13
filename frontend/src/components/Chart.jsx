@@ -24,7 +24,6 @@ export default class chart extends Component {
   render() {
     return (
       <div>
-        <h1>Chart</h1>
         <Chart
           options={this.state.options}
           series={this.state.series}
