@@ -2,9 +2,10 @@ import React, { Component } from "react";
 import TitleBar from "./components/TitleBar";
 import Chart from "./components/Chart";
 import OverView from "./components/OverView";
+import axios from "axios";
 
 function getSocket() {
-  const socketPath = `ws://localhost:8000/ws/stock/`;
+  const socketPath = `ws://localhost:8000/ws/new/`;
   const chatSocket = new WebSocket(socketPath);
   return chatSocket;
 }
@@ -20,17 +21,35 @@ class App extends Component {
     this.chatSocket = getSocket();
   }
 
-  sendData = (ticker) => {
-    this.chatSocket.send(
-      JSON.stringify({
-        text: ticker,
+  getData = (ticker) => {
+    axios
+      .get(`http://${window.location.host}/ticker/${ticker}/`)
+      .then((response) => {
+        console.log(response);
       })
-    );
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  restartData = (ticker) => {
+    axios
+      .get(`http://${window.location.host}/tickerStatus/True/`)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .then(() => {
+        this.getData(ticker);
+      });
   };
 
   handleSetTicker = (symbol) => {
     this.setState({ ticker: symbol }, () => {
-      this.sendData(this.state.ticker);
+      alert(symbol);
+      this.restartData(this.state.ticker);
     });
   };
 
@@ -38,11 +57,10 @@ class App extends Component {
     this.chatSocket.onmessage = (e) => {
       const data = JSON.parse(e.data);
       if (data.status === "Connected") {
-        this.sendData(this.state.ticker);
+        this.getData(this.state.ticker);
       } else {
-        this.setState({ stockdetail: data.price }, () => {
-          this.sendData(this.state.ticker);
-        });
+        console.log("Hello");
+        this.setState({ stockdetail: data.price });
       }
     };
   }
