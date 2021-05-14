@@ -12,7 +12,7 @@ application = get_asgi_application()
 
 ws_patterns =[
     path('ws/stock/',Stock.as_asgi()) , 
-    path('ws/new/',NewStock.as_asgi()) ,   
+   
 ]
 
 

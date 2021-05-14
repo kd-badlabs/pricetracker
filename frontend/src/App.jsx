@@ -3,8 +3,8 @@ import TitleBar from "./components/TitleBar";
 import Chart from "./components/Chart";
 import OverView from "./components/OverView";
 
-function getSocket(id) {
-  const socketPath = `ws://localhost:8000/ws/stock${id}/`;
+function getSocket() {
+  const socketPath = `ws://localhost:8000/ws/stock/`;
   const chatSocket = new WebSocket(socketPath);
   return chatSocket;
 }
@@ -14,10 +14,10 @@ class App extends Component {
     super(props);
     this.state = {
       ticker: "AAPL",
-      stockdetail: null,
       socketid: 0,
+      stockdetail: null,
     };
-    this.chatSocket = getSocket(this.state.socketid);
+    this.chatSocket = getSocket();
   }
 
   sendData = (ticker) => {
@@ -28,24 +28,20 @@ class App extends Component {
     );
   };
 
-  handleSetTicker = (symbol, id) => {
-    alert(id);
-    this.setState({ ticker: symbol, socketid: id }, () => {
-      this.chatSocket = getSocket(this.state.socketid);
-      setTimeout(this.sendData(this.state.ticker), 5000);
+  handleSetTicker = (symbol) => {
+    this.setState({ ticker: symbol }, () => {
+      this.sendData(this.state.ticker);
     });
   };
 
   componentDidMount() {
     this.chatSocket.onmessage = (e) => {
       const data = JSON.parse(e.data);
-      console.log(data);
       if (data.status === "Connected") {
         this.sendData(this.state.ticker);
       } else {
         this.setState({ stockdetail: data.price }, () => {
-          // this.sendData(this.state.ticker);
-          console.log("hello");
+          this.sendData(this.state.ticker);
         });
       }
     };

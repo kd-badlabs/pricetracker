@@ -19,7 +19,6 @@ export default class TitleBar extends Component {
   };
 
   handleTicker = (e) => {
-    const { value } = e.target;
     this.setState({ ticker: value.toUpperCase() });
   };
 
@@ -36,7 +35,7 @@ export default class TitleBar extends Component {
 
   handletickerChange = (e) => {
     this.setState({ ticker_index: e.target.id });
-    this.props.handleSetTicker(e.target.id, e.target.getAttribute("target_id"));
+    this.props.handleSetTicker(e.target.id);
   };
 
   render() {
@@ -61,7 +60,6 @@ export default class TitleBar extends Component {
             <div
               id={ticker}
               key={index}
-              target_id={index}
               className={`border p-1 mr-2 mt-2 text-center col-1 pointer ${
                 this.state.ticker_index == ticker
                   ? "bg-primary text-white"
