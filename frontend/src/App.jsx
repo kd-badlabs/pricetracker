@@ -21,35 +21,20 @@ class App extends Component {
     this.chatSocket = getSocket();
   }
 
-  getData = (ticker) => {
+  getData = (route, ticker) => {
     axios
-      .get(`http://${window.location.host}/ticker/${ticker}/`)
+      .get(`http://${window.location.host}/${route}/${ticker}/`)
       .then((response) => {
         console.log(response);
       })
       .catch((error) => {
         console.log(error);
-      });
-  };
-
-  restartData = (ticker) => {
-    axios
-      .get(`http://${window.location.host}/tickerStatus/True/`)
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .then(() => {
-        this.getData(ticker);
       });
   };
 
   handleSetTicker = (symbol) => {
     this.setState({ ticker: symbol }, () => {
-      alert(symbol);
-      this.restartData(this.state.ticker);
+      this.getData("ticker", this.state.ticker);
     });
   };
 
@@ -57,7 +42,7 @@ class App extends Component {
     this.chatSocket.onmessage = (e) => {
       const data = JSON.parse(e.data);
       if (data.status === "Connected") {
-        this.getData(this.state.ticker);
+        this.getData("ticker", this.state.ticker);
       } else {
         console.log("Hello");
         this.setState({ stockdetail: data.price });
