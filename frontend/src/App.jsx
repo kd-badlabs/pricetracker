@@ -18,12 +18,12 @@ class App extends Component {
       socketid: 0,
       stockdetail: null,
     };
-    this.chatSocket = getSocket();
+    this.socket = getSocket();
   }
 
-  getData = (route, ticker) => {
+  getData = (ticker) => {
     axios
-      .get(`http://${window.location.host}/${route}/${ticker}/`)
+      .get(`http://${window.location.host}/ticker/${ticker}/`)
       .then((response) => {
         console.log(response);
       })
@@ -34,17 +34,16 @@ class App extends Component {
 
   handleSetTicker = (symbol) => {
     this.setState({ ticker: symbol }, () => {
-      this.getData("ticker", this.state.ticker);
+      this.getData(this.state.ticker);
     });
   };
 
   componentDidMount() {
-    this.chatSocket.onmessage = (e) => {
+    this.socket.onmessage = (e) => {
       const data = JSON.parse(e.data);
       if (data.status === "Connected") {
-        this.getData("ticker", this.state.ticker);
+        this.getData(this.state.ticker);
       } else {
-        console.log("Hello");
         this.setState({ stockdetail: data.price });
       }
     };
@@ -61,9 +60,9 @@ class App extends Component {
           />
         </div>
 
-        <div className="py-2 px-3 my-2">
+        {/* <div className="py-2 px-3 my-2">
           <Chart />
-        </div>
+        </div> */}
         <div className="p-2 my-2">
           <OverView stockdetail={this.state.stockdetail} />
         </div>

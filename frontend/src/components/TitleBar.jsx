@@ -19,7 +19,7 @@ export default class TitleBar extends Component {
   };
 
   handleTicker = (e) => {
-    this.setState({ ticker: value.toUpperCase() });
+    this.setState({ ticker: e.target.value.toUpperCase() });
   };
 
   handleDeleteTicker = (e) => {
