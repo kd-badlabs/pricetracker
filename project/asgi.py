@@ -10,10 +10,8 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "project.settings")
 application = get_asgi_application()    
 
 
-ws_patterns =[
-    path('ws/stock/',Stock.as_asgi()) , 
-    path('ws/new/',Stock_Async.as_asgi()) , 
-  
+ws_patterns =[ 
+    path('ws/new/',Stock_Async.as_asgi()) ,  
 ]
 
 
