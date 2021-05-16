@@ -4,7 +4,7 @@ export default class TitleBar extends Component {
     super(props);
     this.state = {
       ticker: "",
-      tickerTag: ["AAPL", "MSFT", "GOOG"],
+      tickerTag: ["AAPL", "MSFT"],
       ticker_index: "AAPL",
     };
   }

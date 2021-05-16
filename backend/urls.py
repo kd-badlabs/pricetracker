@@ -3,5 +3,6 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('ticker/<ticker>/', views.ticker),
+    path('realtimeData/<ticker>/', views.realtimeData),
+    path('historicalData/<data>/', views.historical_Data),
 ]

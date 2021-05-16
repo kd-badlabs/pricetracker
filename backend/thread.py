@@ -20,12 +20,6 @@ class CreateStockData(threading.Thread):
     def stockData(self,tic,per):
         stock = yf.Ticker(tic)
         return stock.history(period=per)
-
-    # call for Historical data  
-    def stockData_period(self,ticker,period,interval):
-        data = yf.download(tickers=ticker, period=period, interval=interval)
-        df = pd.DataFrame(data)
-        return df
             
     def run(self):
         try:
@@ -45,7 +39,7 @@ class CreateStockData(threading.Thread):
                     stock["dividends"]=df.iloc[0].Dividends 
                     async_to_sync(channel_layer.group_send)(
                         'stock_consumer_group' , {
-                            'type' : 'send_data',
+                            'type' : 'real_time_data',
                             'value' : json.dumps(stock)
                         }           
                     )

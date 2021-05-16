@@ -15,15 +15,18 @@ class App extends Component {
     super(props);
     this.state = {
       ticker: "AAPL",
+      period: "7d",
+      interval: "1m",
       socketid: 0,
-      stockdetail: null,
+      stockRealtimeData: null,
+      stockHistoricalData: null,
     };
     this.socket = getSocket();
   }
 
-  getData = (ticker) => {
+  handleRealtimeData = (ticker) => {
     axios
-      .get(`http://${window.location.host}/ticker/${ticker}/`)
+      .get(`http://${window.location.host}/realtimeData/${ticker}/`)
       .then((response) => {
         console.log(response);
       })
@@ -32,19 +35,45 @@ class App extends Component {
       });
   };
 
+  handleHistoricalData = (ticker, period, interval) => {
+    let data = `${ticker}_${period}_${interval}`;
+    axios
+      .get(`http://${window.location.host}/historicalData/${data}/`)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .then(() => {
+        this.handleRealtimeData(ticker);
+      });
+  };
+
   handleSetTicker = (symbol) => {
     this.setState({ ticker: symbol }, () => {
-      this.getData(this.state.ticker);
+      this.handleHistoricalData(
+        this.state.ticker,
+        this.state.period,
+        this.state.interval
+      );
     });
   };
 
   componentDidMount() {
     this.socket.onmessage = (e) => {
-      const data = JSON.parse(e.data);
+      let data = JSON.parse(e.data);
+      console.log(data);
       if (data.status === "Connected") {
-        this.getData(this.state.ticker);
-      } else {
-        this.setState({ stockdetail: data.price });
+        this.handleHistoricalData(
+          this.state.ticker,
+          this.state.period,
+          this.state.interval
+        );
+      } else if (data.status === "HistoricalData") {
+        this.setState({ stockHistoricalData: data.price });
+      } else if (data.status === "RealTimeData") {
+        this.setState({ stockRealtimeData: data.price });
       }
     };
   }
@@ -56,7 +85,7 @@ class App extends Component {
           <TitleBar
             symbol={this.state.ticker}
             handleSetTicker={this.handleSetTicker}
-            stockdetail={this.state.stockdetail}
+            stockdetail={this.state.stockRealtimeData}
           />
         </div>
 
@@ -64,7 +93,7 @@ class App extends Component {
           <Chart />
         </div> */}
         <div className="p-2 my-2">
-          <OverView stockdetail={this.state.stockdetail} />
+          <OverView stockdetail={this.state.stockRealtimeData} />
         </div>
       </div>
     );

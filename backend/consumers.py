@@ -26,9 +26,13 @@ class Stock_Async(AsyncJsonWebsocketConsumer):
             self.channel_name
         )  
     
-    async  def send_data(self , event):
+    async  def real_time_data(self , event):
         data = json.loads(event.get('value'))
-        await self.send(text_data=json.dumps({'price' : data}))
+        await self.send(text_data=json.dumps({'price' : data , "status":"RealTimeData"}))
+    
+    async  def historical_data(self , event):
+        data = json.loads(event.get('value'))
+        await self.send(text_data=json.dumps({'price' : data, "status":"HistoricalData"}))
      
 
        
