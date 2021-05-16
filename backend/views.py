@@ -14,7 +14,7 @@ def index(request):
 
 
 
-# call for Historical data  
+  
 def stockData_period(ticker,period,interval):
     data = yf.download(tickers=ticker, period=period, interval=interval)
     stock_price={"price":[],"volume":""}
@@ -25,9 +25,9 @@ def stockData_period(ticker,period,interval):
     df =df.reset_index()
     df["Datetime"] = df["Datetime"].astype(int)
     data_list =df.to_dict('records')
-
     return data_list
 
+# Request for Historical data
 def historical_Data(request,data):
     ticker=(data.split("_"))[0]
     period=(data.split("_"))[1]
@@ -44,7 +44,7 @@ def historical_Data(request,data):
 
 
 
-# call for Real time data  
+# Request for Real time data  
 tic=""
 getData=None
 def realtimeData(request,ticker):
