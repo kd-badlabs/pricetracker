@@ -3,7 +3,7 @@ import os
 from channels.routing import ProtocolTypeRouter, URLRouter
 from django.core.asgi import get_asgi_application
 from django.urls import path
-from backend.consumers import *
+from stock.consumers import *
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "project.settings")
 
