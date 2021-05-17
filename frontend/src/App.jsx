@@ -90,7 +90,12 @@ class App extends Component {
         </div>
 
         {/* <div className="py-2 px-3 my-2">
-          <Chart />
+          {this.state.stockHistoricalData != null ? (
+            <Chart
+              stockHistoricalData={this.state.stockHistoricalData}
+              stockRealtimeData={this.state.stockRealtimeData}
+            />
+          ) : null}
         </div> */}
         <div className="p-2 my-2">
           <OverView stockdetail={this.state.stockRealtimeData} />
