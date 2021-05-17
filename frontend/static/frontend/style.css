@@ -15,10 +15,23 @@ body {
     letter-spacing: 3px;
 }
 
+.sub_title {
+    font-size: 1.5rem;
+    font-family: 'Montserrat:wght@400', sans-serif;
+    letter-spacing: 3px;
+}
+
 .sub_heading {
-    font-size: 1rem;
+    font-size: 1.5rem;
     font-family: 'Montserrat:wght@300', sans-serif;
     letter-spacing: 3px;
+}
+
+.sub_heading_sm {
+    font-size: 1.25rem;
+    font-family: 'Montserrat:wght@300', sans-serif;
+    letter-spacing: 3px;
+    /* word-spacing: .75rem; */
 }
 
 .border-primary {

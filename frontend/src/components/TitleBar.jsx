@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 export default class TitleBar extends Component {
   constructor(props) {
     super(props);
@@ -76,41 +76,60 @@ export default class TitleBar extends Component {
         <div className="row  border bg-light p-2 ">
           <div className="col-9 align-self-end">
             <div>
-              <span className="title_price   align-self-end">
+              <span className="title_price align-self-end font-weight-bold">
                 {this.props.stockdetail != null
                   ? this.props.stockdetail.close.toFixed(2)
                   : "NA"}
               </span>
-              <span> USD </span>
+              <span className="mr-4 "> USD</span>
               {this.props.stockdetail != null ? (
-                <span
-                  className={`${
-                    this.props.stockdetail.close -
+                <Fragment>
+                  <span
+                    className={`sub_heading_sm ${
+                      this.props.stockdetail.close -
+                        this.props.stockdetail.open <=
+                      0
+                        ? "text-danger"
+                        : "text-success"
+                    }`}
+                  >
+                    {`${(
+                      this.props.stockdetail.close - this.props.stockdetail.open
+                    ).toFixed(2)}  `}
+                    [
+                    {(
+                      ((this.props.stockdetail.close -
+                        this.props.stockdetail.open) /
+                        this.props.stockdetail.open) *
+                      100
+                    ).toFixed(3)}
+                    %]
+                  </span>
+                  <span
+                    className={`${
+                      this.props.stockdetail.close -
+                        this.props.stockdetail.open <=
+                      0
+                        ? "text-danger"
+                        : "text-success"
+                    }`}
+                  >
+                    {this.props.stockdetail.close -
                       this.props.stockdetail.open <=
-                    0
-                      ? "text-danger"
-                      : "text-success"
-                  }`}
-                >
-                  {(
-                    this.props.stockdetail.close - this.props.stockdetail.open
-                  ).toFixed(2)}
-                  [
-                  {(
-                    ((this.props.stockdetail.close -
-                      this.props.stockdetail.open) /
-                      this.props.stockdetail.open) *
-                    100
-                  ).toFixed(3)}
-                  % ]
-                </span>
+                    0 ? (
+                      <i className="bi bi-arrow-down-square-fill"></i>
+                    ) : (
+                      <i className="bi bi-arrow-up-square-fill"></i>
+                    )}
+                  </span>{" "}
+                </Fragment>
               ) : (
                 "NA"
               )}
             </div>
-            <div className="sub_heading">{`${this.props.symbol}`}</div>
+            <div className="sub_title">{`${this.props.symbol}`}</div>
           </div>
-          <div className="col-3 text-right align-self-end">
+          <div className="col-3 text-right align-self-end sub_heading_sm">
             <div>Market Open</div>
             <div>12-May-2021 01:00</div>
           </div>

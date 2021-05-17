@@ -28,8 +28,8 @@ export default class OverView extends Component {
                 id={`menu_${index + 1}`}
                 className={
                   this.state.menu_id === `menu_${index + 1}`
-                    ? "col-2 border-bottom border-primary border-3  py-2 sub_heading"
-                    : "col-2  py-2 sub_heading"
+                    ? "col-2 border-bottom border-primary border-3  py-2 sub_heading font-weight-bold "
+                    : "col-2  py-2 sub_heading "
                 }
                 onClick={this.handleClick}
               >
