@@ -7,7 +7,7 @@
 	$python manage.py runserver
 
 ####   To Update the front end code 
-	$cd frontend
+	$cd stock
 	$npm run build 
 
 
