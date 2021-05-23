@@ -45,3 +45,8 @@ body {
 .pointer {
     cursor: pointer;
 }
+
+.disableClick {
+    pointer-events: none;
+    cursor: default;
+}

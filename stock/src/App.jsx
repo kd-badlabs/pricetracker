@@ -63,7 +63,6 @@ class App extends Component {
   componentDidMount() {
     this.socket.onmessage = (e) => {
       let data = JSON.parse(e.data);
-      console.log(data);
       if (data.status === "Connected") {
         this.handleHistoricalData(
           this.state.ticker,

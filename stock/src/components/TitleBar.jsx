@@ -1,74 +1,146 @@
 import React, { Component, Fragment } from "react";
+import Search from "./Search";
+import axios from "axios";
+
 export default class TitleBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      ticker: "",
-      tickerTag: ["AAPL", "MSFT"],
-      ticker_index: "AAPL",
+      modal_state: false,
+      symbol_index: "AAPL",
+      symbols_list: [
+        {
+          ticker: "AAPL",
+          name: "Apple Inc. Common Stock",
+          industry: "Computer Manufacturing",
+          country: "United States",
+        },
+      ],
+      search: "",
+      search_results: [],
     };
   }
 
-  handleAddticker = () => {
-    if (this.state.ticker != "") {
+  // Ticker bar
+  handleAddSymbol = (e) => {
+    let symbol_creds = e.target.name.split(",");
+    let data = {
+      ticker: symbol_creds[1],
+      name: symbol_creds[2],
+      industry: symbol_creds[3],
+      country: symbol_creds[4],
+    };
+    if (e.target.checked === true) {
       this.setState((prevState) => ({
-        tickerTag: [...prevState.tickerTag, this.state.ticker],
-        ticker: "",
+        symbols_list: [...prevState.symbols_list, data],
       }));
-    }
-  };
-
-  handleTicker = (e) => {
-    this.setState({ ticker: e.target.value.toUpperCase() });
-  };
-
-  handleDeleteTicker = (e) => {
-    const index = this.state.tickerTag.indexOf(e.target.id);
-    let array = [...this.state.tickerTag];
-    if (index > -1) {
-      array.splice(index, 1);
-      this.setState({
-        tickerTag: array,
+    } else if (e.target.checked === false) {
+      let filteredArray = this.state.symbols_list.filter(
+        (item) => item.ticker !== data.ticker
+      );
+      this.setState({ symbols_list: filteredArray }, () => {
+        console.log(this.state.symbols_list);
       });
     }
   };
 
-  handletickerChange = (e) => {
-    this.setState({ ticker_index: e.target.id });
+  handleSymbolChange = (e) => {
+    this.setState({ symbol_index: e.target.id });
     this.props.handleSetTicker(e.target.id);
+  };
+
+  handleSymbolDelete = (e) => {
+    let filteredArray = this.state.symbols_list.filter(
+      (item) => item.ticker !== e.target.id
+    );
+    this.setState({ symbols_list: filteredArray }, () => {
+      console.log(this.state.symbols_list);
+    });
+  };
+
+  // Search Bar
+  handleTicker = (e) => {
+    this.setState({ search: e.target.value.toUpperCase() });
+  };
+
+  handleSearchTicker = () => {
+    this.handleShow();
+    axios
+      .get(`http://${window.location.host}/searchresult/${this.state.search}/`)
+      .then((response) => {
+        this.setState({ search_results: response.data.results });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  // Modal Code
+  handleClose = () => {
+    this.setState({
+      modal_state: false,
+      ticker: "",
+      search: "",
+      search_results: [],
+    });
+  };
+  handleShow = () => {
+    this.setState({ modal_state: true });
   };
 
   render() {
     return (
       <div>
         <div className="row my-2">
-          <input
-            name="ticker"
-            type="text"
-            value={this.state.ticker}
-            className="col-2 mt-2 px-2 border bg-light "
-            placeholder="Type Symbol"
-            onChange={this.handleTicker}
-          />
-          <div
-            className="col-1 text-center pointer p-1 mr-2  mt-2  border text-bold bg-light rounded-right"
-            onClick={this.handleAddticker}
-          >
-            Add
+          <div className=" pl-0 col-3 mt-2  ">
+            <div className="input-group ">
+              <input
+                type="text"
+                name="ticker"
+                value={this.state.search}
+                onChange={this.handleTicker}
+                className="form-control "
+                placeholder="Search Symbol..."
+                aria-label="Recipient's username"
+                aria-describedby="basic-addon2"
+              />
+              <div className="input-group-append">
+                <button
+                  className="btn btn-outline-secondary px-4"
+                  type="button"
+                  onClick={this.handleSearchTicker}
+                >
+                  <i className="bi bi-search"></i>
+                </button>
+              </div>
+            </div>
           </div>
-          {this.state.tickerTag.map((ticker, index) => (
-            <div
-              id={ticker}
-              key={index}
-              className={`border p-1 mr-2 mt-2 text-center col-1 pointer ${
-                this.state.ticker_index == ticker
-                  ? "bg-primary text-white"
-                  : "bg-light text-dark"
-              }`}
-              onDoubleClick={this.handleDeleteTicker}
-              onClick={this.handletickerChange}
-            >
-              {ticker}
+
+          {this.state.symbols_list.map((value, index) => (
+            <div key={index} className="col-1 mt-2 px-1 ">
+              <div className="btn-group w-100" key={index}>
+                <button
+                  id={value.ticker}
+                  type="button"
+                  className={`${
+                    value.ticker == this.props.symbol
+                      ? "btn btn-primary"
+                      : "btn btn-outline-primary"
+                  }`}
+                  onClick={this.handleSymbolChange}
+                >
+                  {value.ticker}
+                </button>
+
+                <button
+                  type="button"
+                  id={value.ticker}
+                  className="btn btn-primary"
+                  onClick={this.handleSymbolDelete}
+                >
+                  X
+                </button>
+              </div>
             </div>
           ))}
         </div>
@@ -121,13 +193,15 @@ export default class TitleBar extends Component {
                     ) : (
                       <i className="bi bi-arrow-up-square-fill"></i>
                     )}
-                  </span>{" "}
+                  </span>
                 </Fragment>
               ) : (
                 "NA"
               )}
             </div>
-            <div className="sub_title">{`${this.props.symbol}`}</div>
+            <div className="sub_title">
+              {`${this.props.symbol}`} <small> {}</small>
+            </div>
           </div>
           <div className="col-4 text-right align-self-end sub_heading_sm">
             <div>Market Open</div>
@@ -137,6 +211,17 @@ export default class TitleBar extends Component {
             </div>
           </div>
         </div>
+        <Search
+          data={this.state.search_results}
+          symbol_list={this.state.symbols_list}
+          ticker={this.state.search}
+          show={this.state.modal_state}
+          handleShow={this.handleShow}
+          handleClose={this.handleClose}
+          handleAddSymbol={this.handleAddSymbol}
+          handleTicker={this.handleTicker}
+          handleSearchTicker={this.handleSearchTicker}
+        />
       </div>
     );
   }
