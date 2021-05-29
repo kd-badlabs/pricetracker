@@ -13,9 +13,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-b$+h)3e#7h8f7d3!q!y5zhg=ui9%jwrqg0@-o9s^pyr+^70u54'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = [".herokuapp.com","127.0.0.1:8000",]
 
 
 # Application definition
@@ -60,16 +60,29 @@ TEMPLATES = [
     },
 ]
 
-# WSGI_APPLICATION = 'project.wsgi.application'
+WSGI_APPLICATION = 'project.wsgi.application'
 ASGI_APPLICATION = 'project.asgi.application'
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
+            # "hosts": [('127.0.0.1', 6379)],
+            "hosts": [os.environ.get('REDIS_URL','redis://localhost:6379)],
         },
     },
 }
+
+
+CACHES = {
+    'default': {
+        'BACKEND': 'channels_redis.cache.RedisCache',
+        'LOCATION':[os.environ.get('REDIS_URL','redis://localhost:6379)],
+        'OPTIONS': {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient"
+        },
+    },
+}
+
 
 # CHANNEL_LAYERS = {
 #     'default': {
@@ -128,7 +141,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'project/static'),
 ]
 
 # Default primary key field type
