@@ -5,6 +5,7 @@ from django.http import JsonResponse
 from .thread import CreateStockData
 
 import pandas as pd
+import numpy as np
 import yfinance as yf
 import json
 
@@ -23,7 +24,7 @@ def stockData_period(ticker,period,interval):
     df = pd.DataFrame(data)
     df = df.drop(['Adj Close'], axis = 1)
     df =df.reset_index()
-    df["Datetime"] = df["Datetime"].astype(int)
+    df["Datetime"] = df["Datetime"].astype(np.int64)
     data_list =df.to_dict('records')
     return data_list
 

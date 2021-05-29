@@ -32,6 +32,7 @@ export default class Search extends Component {
                 </button>
               </div>
             </div>
+            
             {this.props.symbol_list.length !== 0 ? (
               <div className="row mx-1 mb-1">
                 {this.props.symbol_list.map((value, index) => (

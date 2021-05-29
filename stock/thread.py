@@ -26,27 +26,27 @@ class CreateStockData(threading.Thread):
     def run(self):
         try:
             stock={"high":0, "low":0,"open":0,"close":0,"volume":0,"dividends":0}
-            while True: 
-                
+            while True:              
                 if self.killed: 
                     break
                 else:
                     channel_layer = get_channel_layer()
                     data = self.stockData( self.ticker,"1m")
                     df = pd.DataFrame(data)
-                    stock["high"]=df.iloc[0].High
-                    stock["low"]=df.iloc[0].Low
-                    stock["open"]=df.iloc[0].Open
-                    stock["close"]=df.iloc[0].Close
-                    stock["volume"]=df.iloc[0].Volume
-                    stock["dividends"]=df.iloc[0].Dividends 
-                    async_to_sync(channel_layer.group_send)(
-                        'stock_consumer_group' , {
-                            'type' : 'real_time_data',
-                            'value' : json.dumps(stock)
-                        }           
-                    )
-                    time.sleep(1)
+                    if df.iloc[0].Close != stock["close"]:
+                        stock["high"]=df.iloc[0].High
+                        stock["low"]=df.iloc[0].Low
+                        stock["open"]=df.iloc[0].Open
+                        stock["close"]=df.iloc[0].Close
+                        stock["volume"]=df.iloc[0].Volume
+                        stock["dividends"]=df.iloc[0].Dividends 
+                        async_to_sync(channel_layer.group_send)(
+                            'stock_consumer_group' , {
+                                'type' : 'real_time_data',
+                                'value' : json.dumps(stock)
+                            }           
+                        )
+                        time.sleep(1)
         finally :
             print('ended')
     

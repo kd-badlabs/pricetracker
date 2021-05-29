@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import TitleBar from "./components/TitleBar";
 import Chart from "./components/Chart";
+import Chart_II from "./components/Chart_option_2";
 import OverView from "./components/OverView";
 import axios from "axios";
 
@@ -15,7 +16,7 @@ class App extends Component {
     super(props);
     this.state = {
       ticker: "AAPL",
-      period: "7d",
+      period: "2d",
       interval: "1m",
       socketid: 0,
       stockRealtimeData: null,
@@ -88,14 +89,14 @@ class App extends Component {
           />
         </div>
 
-        {/* <div className="py-2 px-3 my-2">
+        <div className="pl-1 my-2">
           {this.state.stockHistoricalData != null ? (
-            <Chart
+            <Chart_II
               stockHistoricalData={this.state.stockHistoricalData}
               stockRealtimeData={this.state.stockRealtimeData}
             />
           ) : null}
-        </div> */}
+        </div>
 
         <div className="p-2 my-2">
           <OverView stockdetail={this.state.stockRealtimeData} />
