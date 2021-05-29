@@ -25,7 +25,7 @@ def uploadData(request):
 def search_result(request,data): 
     print(data)
     results=Company_symbol.objects.filter(
-        Q(symbol=data) | Q(name__icontains=data)
+        Q(symbol=data) 
     ).values_list()
     
     return JsonResponse({'status' : 200,"results":list(results)})
