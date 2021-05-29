@@ -15,6 +15,18 @@ export default class TitleBar extends Component {
           industry: "Computer Manufacturing",
           country: "United States",
         },
+        {
+          ticker: "MSFT",
+          name: "Microsoft. Common Stock",
+          industry: "Computer Manufacturing",
+          country: "United States",
+        },
+        {
+          ticker: "STOP",
+          name: "NA",
+          industry: "NA",
+          country: "NA",
+        },
       ],
       search: "",
       search_results: [],
