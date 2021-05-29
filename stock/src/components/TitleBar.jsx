@@ -22,7 +22,7 @@ export default class TitleBar extends Component {
           country: "United States",
         },
         {
-          ticker: "STOP",
+          ticker: "GOOGL",
           name: "NA",
           industry: "NA",
           country: "NA",
