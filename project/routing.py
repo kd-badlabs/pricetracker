@@ -4,7 +4,6 @@ from stock.consumers import *
 from django.urls import path
 
 application = ProtocolTypeRouter({
-    # WebSocket chat handler
     "websocket": AuthMiddlewareStack(
         URLRouter([
             path('ws/new/',Stock_Async.as_asgi())   
