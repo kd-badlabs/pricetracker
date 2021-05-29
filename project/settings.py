@@ -1,6 +1,7 @@
 from pathlib import Path
 import django_heroku
 import os
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -11,9 +12,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-b$+h)3e#7h8f7d3!q!y5zhg=ui9%jwrqg0@-o9s^pyr+^70u54'
+# SECRET_KEY = os.environ.get('SECRET_KEY')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [".herokuapp.com","127.0.0.1:8000",]
 
@@ -29,7 +33,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'channels',
     'stock',
-    'searchBar'
+    'searchBar',
+    'whitenoise.runserver_nostatic'
+    
 ]
 
 MIDDLEWARE = [
@@ -40,6 +46,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware'
 ]
 
 ROOT_URLCONF = 'project.urls'
@@ -60,28 +67,28 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'project.wsgi.application'
+# WSGI_APPLICATION = 'project.wsgi.application'
 ASGI_APPLICATION = 'project.asgi.application'
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
             # "hosts": [('127.0.0.1', 6379)],
-            "hosts": [os.environ.get('REDIS_URL','redis://localhost:6379)],
+            "hosts": [os.environ.get('REDIS_URL','redis://localhost:6379')]
         },
     },
 }
 
 
-CACHES = {
-    'default': {
-        'BACKEND': 'channels_redis.cache.RedisCache',
-        'LOCATION':[os.environ.get('REDIS_URL','redis://localhost:6379)],
-        'OPTIONS': {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient"
-        },
-    },
-}
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'channels_redis.cache.RedisCache',
+#         'LOCATION':[os.environ.get('REDIS_URL','redis://localhost:6379')],
+#         'OPTIONS': {
+#             "CLIENT_CLASS": "django_redis.client.DefaultClient"
+#         },
+#     },
+# }
 
 
 # CHANNEL_LAYERS = {
@@ -100,6 +107,8 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+db_from_env = dj_database_url.config(conn_max_age=600)
+DATABASES['default'].update(db_from_env)
 
 
 # Password validation
@@ -141,8 +150,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'project/static'),
+    os.path.join(BASE_DIR, 'stock/static'),
 ]
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -150,3 +160,5 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 django_heroku.settings(locals())
+
+# DATABASE_URL='postgres://imafecqhqcskgw:2a3fdb0ccc2603a92150a8cced0c186de5a343dece24167f65d64a5c57ba540d@ec2-52-21-252-142.compute-1.amazonaws.com:5432/dac2bjmuu81mf1'
