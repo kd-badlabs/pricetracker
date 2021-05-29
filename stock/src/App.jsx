@@ -6,7 +6,7 @@ import OverView from "./components/OverView";
 import axios from "axios";
 
 function getSocket() {
-  const socketPath = `ws://localhost:8000/ws/new/`;
+  const socketPath = `wss://${window.location.host}/ws/new/`;
   const chatSocket = new WebSocket(socketPath);
   return chatSocket;
 }
