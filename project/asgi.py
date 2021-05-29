@@ -23,18 +23,19 @@
 
 import os
 import django
+from channels.routing import get_default_application
 from channels.routing import ProtocolTypeRouter, URLRouter
 from django.urls import path
 from stock.consumers import *
-from channels.routing import get_default_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dropdjango.settings")
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "project.settings")
 django.setup()
 application = get_default_application() 
 
 
 ws_patterns =[ 
-    path('wss/new/',Stock_Async.as_asgi()) ,  
+    path('ws/new/',Stock_Async.as_asgi()) ,  
 ]
 
 application = ProtocolTypeRouter({
