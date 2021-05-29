@@ -25,7 +25,7 @@ export default class TitleBar extends Component {
           ticker: "GOOGL",
           name: "NA",
           industry: "NA",
-          country: "NA",
+          country: "USA",
         },
       ],
       search: "",
