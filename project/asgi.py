@@ -34,7 +34,7 @@ application = get_default_application()
 
 
 ws_patterns =[ 
-    path('ws/new/',Stock_Async.as_asgi()) ,  
+    path('wss/new/',Stock_Async.as_asgi()) ,  
 ]
 
 application = ProtocolTypeRouter({
