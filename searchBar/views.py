@@ -23,8 +23,7 @@ def uploadData(request):
 
 
 def search_result(request,data): 
-    print(data)
-    results = Company_symbol.objects.filter(symbol__startswith = data).values()
+    results = Company_symbol.objects.filter(symbol__startswith = data)
     print(results)
     return JsonResponse({'status' : 200,"results":results})
   
