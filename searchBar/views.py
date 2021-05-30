@@ -10,7 +10,7 @@ import os
 # Create your views here.
 def uploadData(request):
     url ="https://github.com/kd-badlabs/pricetracker/blob/fcf41406562a4b49ec8ac6bd2a5364fbabfaf947/searchBar/nasdaq_screener.csv"
-    df = pd.read_csv(url,sep=",")
+    df = pd.read_csv(url)
     df.fillna("NA",inplace=True)
     records = df.to_dict('records')
     for record in records: 
@@ -21,7 +21,7 @@ def uploadData(request):
             country=record["Country"]
             )
         db.save()
-    return JsonResponse({'status' : 200,"results":records})
+    return JsonResponse({'status': 200})
 
 
 
