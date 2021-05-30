@@ -9,7 +9,8 @@ import os
 
 # Create your views here.
 def uploadData(request):
-    df = pd.read_csv(os.path.join(settings.ROOT_PATH, 'nasdaq_screener.csv'))
+    url ="https://github.com/kd-badlabs/pricetracker/blob/fcf41406562a4b49ec8ac6bd2a5364fbabfaf947/searchBar/nasdaq_screener.csv"
+    df = pd.read_csv(url,sep=",")
     df.fillna("NA",inplace=True)
     records = df.to_dict('records')
     for record in records: 
