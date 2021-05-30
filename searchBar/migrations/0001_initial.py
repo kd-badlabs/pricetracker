@@ -15,10 +15,10 @@ class Migration(migrations.Migration):
             name='Company_symbol',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('symbol', models.CharField(max_length=10)),
-                ('name', models.CharField(max_length=200)),
-                ('industry', models.CharField(max_length=200)),
-                ('country', models.CharField(max_length=100)),
+                ('symbol', models.CharField(max_length=600)),
+                ('name', models.CharField(max_length=600)),
+                ('industry', models.CharField(max_length=600)),
+                ('country', models.CharField(max_length=600)),
             ],
             options={
                 'verbose_name_plural': 'Company_symbol',

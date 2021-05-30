@@ -23,19 +23,9 @@ def uploadData(request):
         db.save()
     return JsonResponse({'status': 200})
 
-def uploadData_1(request):
-    url ="https://raw.githubusercontent.com/kd-badlabs/pricetracker/main/searchBar/nasdaq_screener.csv"
-    df = pd.read_csv(url)
-    print(df.head())
-    df.fillna("NA",inplace=True)
-    records = df.to_dict('records')
-    return JsonResponse({'status': 200,"record":records})
-
-
 
 def search_result(request,data): 
-    results=Company_symbol.objects.filter(Q(symbol=data)).values_list()
-    print(results)
+    results=Company_symbol.objects.filter(Q(symbol__startswith=data)| Q(name__startswith = data)).values_list()
     return JsonResponse({'status' : 200,"results":list(results)})
   
     
