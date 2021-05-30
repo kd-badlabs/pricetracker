@@ -9,7 +9,7 @@ import os
 
 # Create your views here.
 def uploadData(request):
-    url ="https://github.com/kd-badlabs/pricetracker/blob/fcf41406562a4b49ec8ac6bd2a5364fbabfaf947/searchBar/nasdaq_screener.csv"
+    url ="https://raw.githubusercontent.com/kd-badlabs/pricetracker/main/searchBar/nasdaq_screener.csv"
     df = pd.read_csv(url)
     df.fillna("NA",inplace=True)
     records = df.to_dict('records')
@@ -24,8 +24,9 @@ def uploadData(request):
     return JsonResponse({'status': 200})
 
 def uploadData_1(request):
-    url ="https://github.com/kd-badlabs/pricetracker/blob/fcf41406562a4b49ec8ac6bd2a5364fbabfaf947/searchBar/nasdaq_screener.csv"
+    url ="https://raw.githubusercontent.com/kd-badlabs/pricetracker/main/searchBar/nasdaq_screener.csv"
     df = pd.read_csv(url)
+    print(df.head())
     df.fillna("NA",inplace=True)
     records = df.to_dict('records')
     return JsonResponse({'status': 200,"record":records})
